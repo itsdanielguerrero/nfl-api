@@ -5,8 +5,7 @@ const teams = require('./teams.json')
 
 function validatePost(body){
     //must have location, mascot, abbreviation, conference, division
-    let { location, mascot, abbreviation, conference, division } = body
-    if(!location || !mascot || !abbreviation || !conference || !division){
+    if(!body.location || !body.mascot || !body.abbreviation || !body.conference || !body.division){
         return false
     } else {
         return true
@@ -16,11 +15,14 @@ function validatePost(body){
 app.use(bodyParser.json())
 
 app.post('/teams', (request, respond) => {
-    let newTeam = request.body || {}
-    newTeam.id = teams.length + 1
-    if(!validatePost(newTeam)){
+    let body = request.body || {}
+    let id = teams.length + 1
+    
+    if(!validatePost(body)){
         respond.status(400).send("The following attributes are required: location, mascot, abbreviation, conference, division")
     } else {
+        let { location, mascot, abbreviation, conference, division } = request.body
+        let newTeam = { id, location, mascot, abbreviation, conference, division } 
         teams.push(newTeam)
         respond.status(201).send(newTeam)
     }
