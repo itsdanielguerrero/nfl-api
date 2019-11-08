@@ -1,7 +1,8 @@
-const express = require('express')
-const app = express()
-const bodyParser = require('body-parser')
-const teams = require('./teams.json')
+const express = require('express') //imports express lib and its node modules
+const app = express() //creats an instance of express
+const bodyParser = require('body-parser') //imports body-parser lib and its node modules
+const teams = require('./teams.json') //teams data from json file
+const mondels = require('./models') //
 
 function validatePost(body){
     //must have location, mascot, abbreviation, conference, division
