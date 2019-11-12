@@ -2,7 +2,7 @@ const express = require('express') //imports express lib and its node modules
 const app = express() //creats an instance of express
 const bodyParser = require('body-parser') //imports body-parser lib and its node modules
 const teams = require('./teams.json') //teams data from json file
-const mondels = require('./models') //
+const models = require('./models') //importing my table definition
 
 function validatePost(body){
     //must have location, mascot, abbreviation, conference, division
@@ -40,16 +40,30 @@ app.get ('/teams', (request, response) => {
 
 app.get ('/teams/:filter', (request, response) => {
     //response.send(request.params.filter)
-    
+    /*
     var teamRequested = teams.filter((team) => {
         return parseInt(request.params.filter) === team.id || request.params.filter === team.abbreviation 
     })
-
     if (teamRequested.length){
         response.send(teamRequested)
     } else {
         response.sendStatus(404)
     }
+    */
+   
+    
+    models.teams.findOne({
+        where: {id: request.params.filter },
+        include: {model: models.teams}
+    }).then((teamRequested) => {
+        if (teamRequested){
+            response.send(teamRequested)
+        } else {
+            response.sendStatus(404)
+        }
+    })
+    
+    
      
 })
 

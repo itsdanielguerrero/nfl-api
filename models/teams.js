@@ -1,5 +1,5 @@
-module.exports = (connection, Sequilize) => { //Defining our table layout form the DATABASE
-    return connection.define('teams', {
+module.exports = (sequelize, Sequilize) => { //Defining our table layout form the DATABASE
+    return sequelize.define('teams', {
         id: { 
             type: Sequilize.INTEGER, autoIncrement: true, primaryKey: true
         },
