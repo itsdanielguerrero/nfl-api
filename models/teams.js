@@ -1,13 +1,13 @@
-module.exports = (sequelize, Sequilize) => { //Defining our table layout form the DATABASE
+module.exports = (sequelize, Sequelize) => { //Defining our table layout form the DATABASE
     return sequelize.define('teams', {
         id: { 
-            type: Sequilize.INTEGER, autoIncrement: true, primaryKey: true
+            type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true,
         },
-        location: {type: Sequilize.STRING,},
-        mascot: {type: Sequilize.STRING,},
-        abbreviation: {type: Sequilize.STRING,},
-        conference: {type: Sequilize.STRING,},
-        division: {type: Sequilize.STRING,},
+        location: {type: Sequelize.STRING,},
+        mascot: {type: Sequelize.STRING,},
+        abbreviation: {type: Sequelize.STRING,},
+        conference: {type: Sequelize.STRING,},
+        division: {type: Sequelize.STRING,},
     })
 
 }
@@ -21,8 +21,8 @@ CREATE TABLE teams (
 	conference ENUM('AFC', 'NFC'),
 	division ENUM('North', 'South', 'East', 'West'),
 	createdAt DATETIME DEFAULT NOW(),                      //I can ignore these attributes of my table
-	updatedAt DATETIME DEFAULT NOW() ON UPDATE NOW(),      //because I imagine it can get complcated
-	deletedAt DATETIME DEFAULT NOW(),                      //so its better to let mysql/workbench handle this
+	updatedAt DATETIME DEFAULT NOW() ON UPDATE NOW(),      //because sequelize manages it for us.
+	deletedAt DATETIME DEFAULT NOW(),                      //sequelize assumes they are there
 	PRIMARY KEY(id) *****
 );
 */

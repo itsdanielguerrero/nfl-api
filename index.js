@@ -1,8 +1,7 @@
 const express = require('express') //imports express lib and its node modules
 const app = express() //creats an instance of express
 const bodyParser = require('body-parser') //imports body-parser lib and its node modules
-const teams = require('./teams.json') //teams data from json file
-const models = require('./models') //importing my table definition
+const models = require('./models') //importing my DB connection and 'teams' model
 
 function validatePost(body){
     //must have location, mascot, abbreviation, conference, division
@@ -15,17 +14,16 @@ function validatePost(body){
 
 app.use(bodyParser.json())
 
-app.post('/teams', (request, respond) => {
+app.post('/teams', (request, response) => {
     let body = request.body || {}
-    let id = teams.length + 1
+    let { location, mascot, abbreviation, conference, division } = request.body
     
     if(!validatePost(body)){
         respond.status(400).send("The following attributes are required: location, mascot, abbreviation, conference, division")
     } else {
-        let { location, mascot, abbreviation, conference, division } = request.body
-        let newTeam = { id, location, mascot, abbreviation, conference, division } 
-        teams.push(newTeam)
-        respond.status(201).send(newTeam)
+        models.Teams.create({location, mascot, abbreviation, conference, division}).then((team) => {
+            response.status(201).send(team)
+        })
     }
 
 })
@@ -35,26 +33,24 @@ app.get ('/', (request, response) => {
 })
 
 app.get ('/teams', (request, response) => {
-    response.send(teams)
+    models.Teams.findAll({}).then((team) => {
+        response.send(team)
+    })
 })
 
 app.get ('/teams/:filter', (request, response) => {
-    //response.send(request.params.filter)
-    /*
-    var teamRequested = teams.filter((team) => {
-        return parseInt(request.params.filter) === team.id || request.params.filter === team.abbreviation 
-    })
-    if (teamRequested.length){
-        response.send(teamRequested)
-    } else {
-        response.sendStatus(404)
-    }
-    */
-   
-    
-    models.teams.findOne({
-        where: {id: request.params.filter },
-        include: {model: models.teams}
+
+    models.Teams.findOne({
+        where: {
+            [models.Op.or]: { 
+                id: request.params.filter,
+                location: request.params.filter,
+                mascot: request.params.filter,
+                abbreviation: request.params.filter,
+                conference: request.params.filter,
+                division: request.params.filter,
+            },
+        }
     }).then((teamRequested) => {
         if (teamRequested){
             response.send(teamRequested)

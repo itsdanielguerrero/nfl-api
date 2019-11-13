@@ -1,4 +1,4 @@
-require('dotenv').config() //we need dotenv to keep our DB configs SAFE!!
+const dotenv = require('dotenv').config() //we need dotenv to keep our DB configs SAFE!!
 
 //define required env variables to set up a connection to out DB
 module.exports = {
