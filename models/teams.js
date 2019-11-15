@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => { //Defining our table layout form the DATABASE
-    return sequelize.define('teams', {
+    return sequelize.define('nflTeams', {
         id: { 
             type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true,
         },

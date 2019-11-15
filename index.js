@@ -2,6 +2,7 @@ const express = require('express') //imports express lib and its node modules
 const app = express() //creats an instance of express
 const bodyParser = require('body-parser') //imports body-parser lib and its node modules
 const models = require('./models') //importing my DB connection and 'teams' model
+const PORT = process.env.PORT || 1338
 
 function validatePost(body){
     //must have location, mascot, abbreviation, conference, division
@@ -67,6 +68,6 @@ app.all('*', (request, response) => {
     response.send('Oops, Did you find what your looking for?')
 })
 
-app.listen(1338, () => {
+app.listen(PORT, () => {
     console.log('Server is up!')
 })
