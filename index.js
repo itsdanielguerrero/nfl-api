@@ -1,25 +1,15 @@
 const express = require('express') //imports express lib and its node modules
 const app = express() //creats an instance of express
 const bodyParser = require('body-parser') //imports body-parser lib and its node modules
-const models = require('./models') //importing my DB connection and 'teams' model
+const models = require('./models') //importing my DB connection and 'teams' model and Op
 const PORT = process.env.PORT || 1338
-
-function validatePost(body){
-    //must have location, mascot, abbreviation, conference, division
-    if(!body.location || !body.mascot || !body.abbreviation || !body.conference || !body.division){
-        return false
-    } else {
-        return true
-    }
-}
 
 app.use(bodyParser.json())
 
 app.post('/teams', (request, response) => {
-    let body = request.body || {}
     let { location, mascot, abbreviation, conference, division } = request.body
     
-    if(!validatePost(body)){
+    if(!location || !mascot || !abbreviation || !conference || !division) {
         respond.status(400).send("The following attributes are required: location, mascot, abbreviation, conference, division")
     } else {
         models.Teams.create({location, mascot, abbreviation, conference, division}).then((team) => {
@@ -41,12 +31,10 @@ app.get ('/teams', (request, response) => {
 
 app.get ('/teams/:filter', (request, response) => {
 
-    models.Teams.findOne({
+    models.Teams.findAll({
         where: {
             [models.Op.or]: { 
                 id: request.params.filter,
-                location: request.params.filter,
-                mascot: request.params.filter,
                 abbreviation: request.params.filter,
                 conference: request.params.filter,
                 division: request.params.filter,
@@ -59,9 +47,7 @@ app.get ('/teams/:filter', (request, response) => {
             response.sendStatus(404)
         }
     })
-    
-    
-     
+
 })
 
 app.all('*', (request, response) => {
